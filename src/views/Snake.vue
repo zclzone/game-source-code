@@ -234,10 +234,11 @@ export default {
 
 .msg {
   height: 35px;
+  width: 20%;
   line-height: 35px;
   border-radius: 5px;
   text-align: center;
-  background: green;
+  background: #84cdef;
   display: none;
 }
 
