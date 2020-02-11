@@ -1,93 +1,67 @@
 <template>
   <div class="box">
-    <div class="view"
-         v-show="view === 1">
-      <h3>情人节到了，我为你准备了一份大礼<br />想不想要？</h3>
-      <button class="no"
-              @click="no1 = '别开玩笑了'">{{no1}}</button><button class="yes"
-              @click="view = 3">我要</button>
+    <div class="view" v-show="view === 1">
+      <h3>情人节到了，我为你准备了一份大礼<br /><br />想不想要？</h3>
+      <br />
+      <button class="no" @click="no1 = '别开玩笑了'">{{no1}}</button><button class="yes" @click="view = 3">我要</button>
     </div>
 
-    <div class="view"
-         v-show="view === 3">
-      <h3>首先~说一句夸奖我的话</h3>
+    <div class="view" v-show="view === 3">
+      <h3>首先~<br /><br />说一句夸奖我的话</h3>
       <br />
-      <input type="radio"
-             name="word"
-             @click.prevent="select1">无聊
-      <input type="radio"
-             name="word"
-             @click.prevent="select2">打屎你
-      <input type="radio"
-             name="word"
-             @click="isSelected = true">你真帅
+      <span class="word" @click="select1">无聊</span>
+      <span class="word" @click="select2">打屎你</span>
+      <span :class="{word:true,selected:isSelected}" @click="isSelected = !isSelected">你真帅</span>
       <br />
       <br />
-      <button class="no"
-              @click="no3 = '别开玩笑了'">{{no3}}</button>
-      <button class="yes"
-              @click="btn4">我是认真的</button>
+      <br />
+      <button class="no" @click="no3 = '别开玩笑了'">{{no3}}</button>
+      <button class="yes" @click="btn4">我是认真的</button>
     </div>
-    <div class="view"
-         v-show="view === 4">
-      <h3>嘴真甜~<br />那么，请开始寻找你的礼物吧</h3>
-      <button class="yes"
-              @click="start">开始</button>
+    <div class="view" v-show="view === 4">
+      <h3>嘴真甜~
+        <br />
+        <br />
+        那么，请开始寻找你的礼物吧
+      </h3>
+      <br />
+      <button class="yes" @click="start">开始</button>
     </div>
 
-    <div class="view"
-         v-show="view === 5">
-      <div v-show="gift === 1 || gift === 0"
-           class="gift"
-           @click="selectWrong">
+    <div class="view" v-show="view === 5">
+      <div v-show="gift === 1 || gift === 0" class="gift" @click="selectWrong">
         <div class="heart">
         </div>
       </div>
-      <div v-show="gift === 2 || gift === 0"
-           class="gift"
-           @click="selectWrong">
+      <div v-show="gift === 2 || gift === 0" class="gift" @click="selectWrong">
         <div class="heart">
         </div>
       </div>
-      <div v-show="gift === 3 || gift === 0"
-           class="gift"
-           @click="selectWrong">
+      <div v-show="gift === 3 || gift === 0" class="gift" @click="selectWrong">
         <div class="heart">
         </div>
       </div>
-      <div v-show="gift === 4 || gift === 0"
-           class="gift"
-           @click="selectWrong">
+      <div v-show="gift === 4 || gift === 0" class="gift" @click="selectWrong">
         <div class="heart">
         </div>
       </div>
-      <div v-show="gift === 5 || gift === 0"
-           class="gift"
-           @click="right">
+      <div v-show="gift === 5 || gift === 0" class="gift" @click="right">
         <div class="heart">
         </div>
       </div>
-      <div v-show="gift === 6 || gift === 0"
-           class="gift"
-           @click="selectWrong">
+      <div v-show="gift === 6 || gift === 0" class="gift" @click="selectWrong">
         <div class="heart">
         </div>
       </div>
-      <div v-show="gift === 7 || gift === 0"
-           class="gift"
-           @click="selectWrong">
+      <div v-show="gift === 7 || gift === 0" class="gift" @click="selectWrong">
         <div class="heart">
         </div>
       </div>
-      <div v-show="gift === 8 || gift === 0"
-           class="gift"
-           @click="selectWrong">
+      <div v-show="gift === 8 || gift === 0" class="gift" @click="selectWrong">
         <div class="heart">
         </div>
       </div>
-      <div v-show="gift === 9 || gift === 0"
-           class="gift"
-           @click="selectWrong">
+      <div v-show="gift === 9 || gift === 0" class="gift" @click="selectWrong">
         <div class="heart">
         </div>
       </div>
@@ -95,7 +69,7 @@
         <div class="rel-heart hide">
         </div>
       </div>
-      <h3 v-if="isFind">{{msg}}</h3>
+      <h3 v-if="isFind" v-html="msg" />
     </div>
   </div>
 </template>
@@ -119,9 +93,11 @@ export default {
   },
   methods: {
     select1 () {
+      this.isSelected = false
       alert('不许骂我~~')
     },
     select2 () {
+      this.isSelected = false
       alert('不许打我~~')
     },
     btn4 () {
@@ -152,7 +128,7 @@ export default {
       document.querySelector('.rel-heart').classList.remove('hide')
       this.gift = 0
       this.isFind = true
-      this.msg = '终于找到了，小笨蛋 \t 恭喜获得爱心一份~'
+      this.msg = '终于找到了，小笨蛋 <br/><br/> 恭喜获得爱心一份~<br/>'
       clearInterval(this.timer)
     }
   }
@@ -160,22 +136,29 @@ export default {
 </script>
 
 <style lang="scss">
+.hide {
+  visibility: hidden;
+}
 .box {
-  .hide {
-    visibility: hidden;
-  }
+  margin: 0 auto;
+  box-sizing: border-box;
+  // background: rgba(pink, 0.3);
+  background: linear-gradient(to bottom left, #feecef, pink);
+  height: 100vh;
+  width: 100%;
+  max-width: 420px;
+  max-height: 920px;
+  padding: 15px;
+  padding-top: 200px;
+  text-align: center;
   .view {
-    height: 100vh;
-    width: 100%;
-    margin: 0 auto;
-    padding: 100px 15px;
+    transition: all 0.6s;
     position: relative;
-    text-align: center;
-    background: rgba(pink, 0.1);
     h3 {
       font-size: 16px;
       font-weight: 400;
       background: linear-gradient(to right, red, blue);
+      background-clip: text;
       -webkit-background-clip: text;
       color: transparent;
     }
@@ -184,7 +167,7 @@ export default {
       font-size: 16px;
       height: 40px;
       width: 120px;
-      color: blue;
+      color: red;
       border-radius: 16px;
       background: linear-gradient(45deg, pink, skyblue);
       border: none;
@@ -195,7 +178,31 @@ export default {
         color: blue;
       }
       &:active {
+        color: blue;
+      }
+    }
+    button.yes {
+      color: blue;
+      &:hover {
+        background: linear-gradient(45deg, skyblue, pink);
         color: red;
+      }
+      &:active {
+        color: red;
+      }
+    }
+    .word {
+      display: inline-block;
+      padding: 5px 10px;
+      color: gray;
+      margin: 0 15px;
+      border-radius: 5px;
+      border: 1px solid pink;
+      &.selected {
+        background: skyblue;
+        color: red;
+        border: none;
+        border: 1px solid skyblue;
       }
     }
     .gift {
@@ -249,11 +256,13 @@ export default {
         }
       }
       &:nth-child(1) {
-        left: 150px;
-        top: 80px;
+        left: 0;
+        right: 0;
+        margin: auto;
+        top: 70px;
       }
       &:nth-child(2) {
-        left: 75px;
+        left: 70px;
         top: 40px;
       }
 
@@ -268,8 +277,10 @@ export default {
       }
 
       &:nth-child(5) {
-        left: 150px;
-        bottom: 20px;
+        left: 0;
+        right: 0;
+        margin: auto;
+        top: 260px;
       }
       &:nth-child(6) {
         right: 60px;
@@ -281,16 +292,20 @@ export default {
       }
 
       &:nth-child(8) {
-        right: 75px;
+        right: 70px;
         top: 40px;
       }
       &:nth-child(9) {
-        left: 150px;
-        top: 80px;
+        left: 0;
+        right: 0;
+        margin: auto;
+        top: 70px;
       }
       &:nth-child(10) {
-        left: 150px;
-        top: 150px;
+        left: 0;
+        right: 0;
+        top: 145px;
+        margin: auto;
       }
     }
   }
