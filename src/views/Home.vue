@@ -1,31 +1,32 @@
 <template>
   <div class="box">
     <div class="view" v-show="view === 1">
-      <h3>情人节到了，我为你准备了一份大礼<br /><br />想不想要？</h3>
-      <br />
-      <button class="no" @click="no1 = '别开玩笑了'">{{no1}}</button><button class="yes" @click="view = 3">我要</button>
+      <h3 :text="view1_word1">{{view1_word1}}</h3>
+      <h3 :text="view1_word2">{{view1_word2}}</h3>
+      <button class="no" @click="no1 = '别开玩笑了'" v-if="isWordOver">{{no1}}</button><button class="yes" @click="changeView1"
+        v-if="isWordOver">我要</button>
     </div>
 
     <div class="view" v-show="view === 3">
-      <h3>首先~<br /><br />说一句夸奖我的话</h3>
+      <h3 :text="view3_word1">{{view3_word1}}</h3>
+      <h3 :text="view3_word2">{{view3_word2}}</h3>
       <br />
-      <span class="word" @click="select1">无聊</span>
-      <span class="word" @click="select2">打屎你</span>
-      <span :class="{word:true,selected:isSelected}" @click="isSelected = !isSelected">你真帅</span>
-      <br />
-      <br />
-      <br />
-      <button class="no" @click="no3 = '别开玩笑了'">{{no3}}</button>
-      <button class="yes" @click="btn4">我是认真的</button>
+      <div v-if="isWordOver">
+        <span class="word" @click="select1">无聊</span>
+        <span class="word" @click="select2">打屎你</span>
+        <span :class="{word:true,selected:isSelected}" @click="isSelected = !isSelected">你真帅</span>
+        <br />
+        <br />
+        <br />
+        <button class="no" @click="no3 = '别开玩笑了'">{{no3}}</button>
+        <button class="yes" @click="btn4">我是认真的</button>
+      </div>
+
     </div>
     <div class="view" v-show="view === 4">
-      <h3>嘴真甜~
-        <br />
-        <br />
-        那么，请开始寻找你的礼物吧
-      </h3>
-      <br />
-      <button class="yes" @click="start">开始</button>
+      <h3 :text="view4_word1">{{view4_word1}}</h3>
+      <h3 :text="view4_word2">{{view4_word2}}</h3>
+      <button class="yes" @click="start" v-if="isWordOver">开始</button>
     </div>
 
     <div class="view" v-show="view === 5">
@@ -69,7 +70,8 @@
         <div class="rel-heart hide">
         </div>
       </div>
-      <h3 v-if="isFind" v-html="msg" />
+      <h3 v-if="isFind" :text="msg1">{{msg1}}</h3>
+      <h3 v-if="isFind" :text="msg2">{{msg2}}</h3>
     </div>
   </div>
 </template>
@@ -85,13 +87,45 @@ export default {
       no3: '不玩了',
       no4: '不玩了',
       isSelected: false,
+      isWordOver: false,
       gift: 0,
       timer: null,
       isFind: false,
-      msg: ''
+      msg1: '',
+      msg2: '',
+      view1_word1: '',
+      view1_word2: '',
+      view3_word1: '',
+      view3_word2: '',
+      view4_word1: '',
+      view4_word2: ''
     }
   },
+  mounted () {
+    let word1 = '情人节到了，我为你准备了一份大礼'
+    let word2 = '想不想要？'
+    this.printWord('view1_word1', word1, 400)
+    setTimeout(() => {
+      this.printWord('view1_word2', word2, 200)
+      setTimeout(_ => {
+        this.isWordOver = true
+      }, 200 * word2.length + 200)
+    }, 400 * word1.length)
+  },
   methods: {
+    changeView1 () {
+      this.view = 3
+      this.isWordOver = false
+      let word1 = '首先~'
+      let word2 = '说一句夸奖我的话'
+      this.printWord('view3_word1', word1, 200)
+      setTimeout(() => {
+        this.printWord('view3_word2', word2, 300)
+        setTimeout(_ => {
+          this.isWordOver = true
+        }, 300 * word2.length + 200)
+      }, 200 * word1.length)
+    },
     select1 () {
       this.isSelected = false
       alert('不许骂我~~')
@@ -105,6 +139,16 @@ export default {
         alert('哼哼！休想糊弄我，必须夸我')
       } else {
         this.view = 4
+        this.isWordOver = false
+        let word1 = '嘴真甜~'
+        let word2 = '那么，请开始寻找你的礼物吧'
+        this.printWord('view4_word1', word1, 200)
+        setTimeout(() => {
+          this.printWord('view4_word2', word2, 200)
+          setTimeout(_ => {
+            this.isWordOver = true
+          }, 200 * word2.length + 500)
+        }, 200 * word1.length)
       }
     },
     start () {
@@ -117,10 +161,11 @@ export default {
       }, 300)
     },
     selectWrong () {
-      this.msg = '错了，小笨蛋'
+      this.msg1 = '错了，小笨蛋'
       this.isFind = true
       setTimeout(() => {
-        this.msg = ''
+        this.msg1 = ''
+        this.msg2 = ''
         this.isFind = false
       }, 1000);
     },
@@ -128,8 +173,28 @@ export default {
       document.querySelector('.rel-heart').classList.remove('hide')
       this.gift = 0
       this.isFind = true
-      this.msg = '终于找到了，小笨蛋 <br/><br/> 恭喜获得爱心一份~<br/>'
+      this.msg1 = '终于找到了，小笨蛋~'
+      this.msg2 = '恭喜获得爱心一份'
       clearInterval(this.timer)
+    },
+    printWord (prop, word, speed) {
+      let index = 0
+      let interval = setInterval(() => {
+        if (index === word.length) {
+          clearInterval(interval)
+          this[prop] = this[prop].replace('|', '')
+          return
+        }
+        this[prop] = this[prop].replace('|', '')
+        this[prop] = `${this[prop]}${word[index]}|`
+        // this.style = {
+        //   background: 'linear-gradient(to right, red, blue)',
+        //   backgroundClip: 'text',
+        //   webkitBackgroundClip: 'text',
+        //   color: 'transparent'
+        // }
+        index++
+      }, speed);
     }
   }
 }
@@ -157,10 +222,19 @@ export default {
     h3 {
       font-size: 16px;
       font-weight: 400;
-      background: linear-gradient(to right, red, blue);
-      background-clip: text;
-      -webkit-background-clip: text;
-      color: transparent;
+      color: blue;
+      position: relative;
+      // background: linear-gradient(to right, red, blue);
+      // background-clip: text;
+      // -webkit-background-clip: text;
+      // color: transparent;
+    }
+    h3::before {
+      content: attr(text);
+      position: absolute;
+      z-index: 10;
+      color: red;
+      -webkit-mask: linear-gradient(to right, blue, transparent);
     }
     button {
       margin-right: 20px;
